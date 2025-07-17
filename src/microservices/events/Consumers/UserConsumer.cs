@@ -4,14 +4,14 @@ using Newtonsoft.Json;
 
 namespace EventsService.Consumers
 {
-    public class UserConsumer(IConfiguration config) : ConsumerBase<string, string>(config)
+    public class UserConsumer(IConfiguration config, ILogger<UserConsumer> logger) : ConsumerBase<string, string>(config, logger)
     {
         protected override string TopicSettingKey => "UserTopic";
 
         protected override void Consume(ConsumeResult<string, string> result)
         {
             var userEvent = JsonConvert.DeserializeObject<UserEvent>(result.Message.Value)!;
-            Console.WriteLine("Принято событие пользователя: {0}", userEvent.user_id);
+            Logger.LogInformation("Принято событие пользователя: {0}", userEvent.user_id);
         }
     }
 }

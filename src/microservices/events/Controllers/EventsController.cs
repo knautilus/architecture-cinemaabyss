@@ -20,7 +20,7 @@ namespace EventsService.Controllers
         /// <summary>
         /// Send MovieEvent
         /// </summary>
-        /// <response code="200">MovieEvent sent</response>
+        /// <response code="201">MovieEvent sent</response>
         [HttpPost("movie")]
         public async Task<IActionResult> CreateMovieEvent([FromBody] MovieEvent movieEvent, CancellationToken cancellationToken)
         {
@@ -31,44 +31,51 @@ namespace EventsService.Controllers
                     Value = JsonConvert.SerializeObject(movieEvent)
                 });
             logger.LogInformation("Отправлено событие фильма: {0}", movieEvent.movie_id);
-
-            return Ok();
+            return GetSuccessResponse();
         }
 
         /// <summary>
         /// Send UserEvent
         /// </summary>
-        /// <response code="200">UserEvent sent</response>
+        /// <response code="201">UserEvent sent</response>
         [HttpPost("user")]
         public async Task<IActionResult> CreateUserEvent([FromBody] UserEvent userEvent, CancellationToken cancellationToken)
         {
             await userProducer.ProduceAsync(_userTopic,
-                new Message<string, string>
-                {
-                    Key = userEvent.user_id.ToString(),
-                    Value = JsonConvert.SerializeObject(userEvent)
-                });
+            new Message<string, string>
+            {
+                Key = userEvent.user_id.ToString(),
+                Value = JsonConvert.SerializeObject(userEvent)
+            });
             logger.LogInformation("Отправлено событие пользователя: {0}", userEvent.user_id);
-
-            return Ok();
+            return GetSuccessResponse();
         }
 
         /// <summary>
         /// Send PaymentEvent
         /// </summary>
-        /// <response code="200">PaymentEvent sent</response>
+        /// <response code="201">PaymentEvent sent</response>
         [HttpPost("payment")]
         public async Task<IActionResult> CreatePaymentEvent([FromBody] PaymentEvent paymentEvent, CancellationToken cancellationToken)
         {
             await paymentProducer.ProduceAsync(_paymentTopic,
-                new Message<string, string>
-                {
-                    Key = paymentEvent.payment_id.ToString(),
-                    Value = JsonConvert.SerializeObject(paymentEvent)
-                });
+            new Message<string, string>
+            {
+                Key = paymentEvent.payment_id.ToString(),
+                Value = JsonConvert.SerializeObject(paymentEvent)
+            });
             logger.LogInformation("Отправлено событие оплаты: {0}", paymentEvent.payment_id);
+            return GetSuccessResponse();
+        }
 
-            return Ok();
+        private static IActionResult GetSuccessResponse()
+        {
+            return new ObjectResult(new Response { status = Status.Success }) { StatusCode = StatusCodes.Status201Created };
+        }
+
+        private static IActionResult GetErrorResponse(string error)
+        {
+            return new ObjectResult(new Response { status = Status.Error, error = error }) { StatusCode = StatusCodes.Status400BadRequest };
         }
     }
 }

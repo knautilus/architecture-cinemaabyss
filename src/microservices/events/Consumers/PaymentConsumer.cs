@@ -4,14 +4,14 @@ using Newtonsoft.Json;
 
 namespace EventsService.Consumers
 {
-    public class PaymentConsumer(IConfiguration config) : ConsumerBase<string, string>(config)
+    public class PaymentConsumer(IConfiguration config, ILogger<PaymentConsumer> logger) : ConsumerBase<string, string>(config, logger)
     {
         protected override string TopicSettingKey => "PaymentTopic";
 
         protected override void Consume(ConsumeResult<string, string> result)
         {
             var paymentEvent = JsonConvert.DeserializeObject<PaymentEvent>(result.Message.Value)!;
-            Console.WriteLine("Принято событие оплаты: {0}", paymentEvent.payment_id);
+            Logger.LogInformation("Принято событие оплаты: {0}", paymentEvent.payment_id);
         }
     }
 }

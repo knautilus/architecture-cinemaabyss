@@ -4,14 +4,14 @@ using Newtonsoft.Json;
 
 namespace EventsService.Consumers
 {
-    public class MovieConsumer(IConfiguration config) : ConsumerBase<string, string>(config)
+    public class MovieConsumer(IConfiguration config, ILogger<MovieConsumer> logger) : ConsumerBase<string, string>(config, logger)
     {
         protected override string TopicSettingKey => "MovieTopic";
 
         protected override void Consume(ConsumeResult<string, string> result)
         {
             var movieEvent = JsonConvert.DeserializeObject<MovieEvent>(result.Message.Value)!;
-            Console.WriteLine("Принято событие фильма: {0}", movieEvent.movie_id);
+            Logger.LogInformation("Принято событие фильма: {0}", movieEvent.movie_id);
         }
     }
 }

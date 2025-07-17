@@ -6,10 +6,11 @@ namespace EventsService.Consumers
     {
         private readonly string _topic;
         private readonly IConsumer<TKey, TValue> _kafkaConsumer;
+        protected readonly ILogger Logger;
 
         protected abstract string TopicSettingKey { get; }
 
-        public ConsumerBase(IConfiguration config)
+        public ConsumerBase(IConfiguration config, ILogger logger)
         {
             var consumerConfig = new ConsumerConfig
             {
@@ -18,6 +19,7 @@ namespace EventsService.Consumers
             };
             _topic = config.GetValue<string>(TopicSettingKey)!;
             _kafkaConsumer = new ConsumerBuilder<TKey, TValue>(consumerConfig).Build();
+            Logger = logger;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -43,7 +45,7 @@ namespace EventsService.Consumers
                 catch (ConsumeException e)
                 {
                     // Consumer errors should generally be ignored (or logged) unless fatal.
-                    Console.WriteLine($"Consume error: {e.Error.Reason}");
+                    Logger.LogError($"Consume error: {e.Error.Reason}");
 
                     if (e.Error.IsFatal)
                     {
@@ -52,7 +54,7 @@ namespace EventsService.Consumers
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"Unexpected error: {e}");
+                    Logger.LogError($"Unexpected error: {e}");
                     break;
                 }
             }
@@ -61,7 +63,7 @@ namespace EventsService.Consumers
         protected virtual void Consume(ConsumeResult<TKey, TValue> result)
         {
             // Handle message...
-            Console.WriteLine($"{result.Message.Key}: {result.Message.Value}");
+            Logger.LogInformation($"{result.Message.Key}: {result.Message.Value}");
         }
 
         public override void Dispose()
