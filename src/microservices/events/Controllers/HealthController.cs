@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EventsService.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EventsService.Controllers
 {
@@ -13,7 +14,7 @@ namespace EventsService.Controllers
         [HttpGet("health")]
         public IActionResult Health()
         {
-            return Ok();
+            return Ok(new HealthCheckResponse { status = true });
         }
     }
 }

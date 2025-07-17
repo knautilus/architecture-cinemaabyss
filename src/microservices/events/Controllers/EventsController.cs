@@ -70,12 +70,12 @@ namespace EventsService.Controllers
 
         private static IActionResult GetSuccessResponse()
         {
-            return new ObjectResult(new Response { status = Status.Success }) { StatusCode = StatusCodes.Status201Created };
+            return new ObjectResult(new EventsResponse { status = Status.Success }) { StatusCode = StatusCodes.Status201Created };
         }
 
         private static IActionResult GetErrorResponse(string error)
         {
-            return new ObjectResult(new Response { status = Status.Error, error = error }) { StatusCode = StatusCodes.Status400BadRequest };
+            return new ObjectResult(new EventsResponse { status = Status.Error, error = error }) { StatusCode = StatusCodes.Status400BadRequest };
         }
     }
 }
