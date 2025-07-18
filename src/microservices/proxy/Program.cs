@@ -3,8 +3,8 @@ using Yarp.ReverseProxy;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
-    .AddEnvironmentVariables()
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -54,5 +54,5 @@ app.Run("http://*:8000");
 
 string ChooseCluster(HttpContext context, int moviesMigrationPercent)
 {
-    return Random.Shared.Next(100) >= moviesMigrationPercent ? "moviesservice" : "monolith";
+    return Random.Shared.Next(100) < moviesMigrationPercent ? "moviesservice" : "monolith";
 }
