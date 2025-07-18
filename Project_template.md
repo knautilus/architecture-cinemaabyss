@@ -56,9 +56,11 @@
 Необходимые тесты для проверки этого API вызываются при запуске npm run test:local из папки tests/postman 
 
 Скриншот тестов
+
 ![tests-local.png](images/tests-local.png)
 
 Скриншот состояния топиков Kafka из UI http://localhost:8090
+
 ![topics.png](images/topics.png)
 
 # Задание 3
@@ -277,10 +279,13 @@ cat .docker/config.json | base64
 ![tests-kubernetes.png](images/tests-kubernetes.png)
 
 #### Шаг 3
+
 Скриншот вывода при вызове https://cinemaabyss.example.com/api/movies
+
 ![response-api-movies.png](images/response-api-movies.png)
 
 Скриншот вывода event-service после вызова тестов
+
 ![logs-events-service.png](images/logs-events-service.png)
 
 # Задание 4
