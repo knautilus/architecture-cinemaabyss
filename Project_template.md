@@ -358,9 +358,12 @@ kubectl get pods -n cinemaabyss
 minikube tunnel
 ```
 
+![helm-start.png](images/helm-start.png)
+
 Потом вызовите 
 https://cinemaabyss.example.com/api/movies
-и приложите скриншот развертывания helm и вывода https://cinemaabyss.example.com/api/movies
+
+![helm-response-api-movies.png](images/helm-response-api-movies.png)
 
 ## Удаляем все
 

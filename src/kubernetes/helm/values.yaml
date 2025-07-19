@@ -5,7 +5,7 @@ global:
 
 # Image pull secrets
 imagePullSecrets:
-  dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6
+  dockerconfigjson: eyAJImF1dGhzIjoge30sIAkiY3JlZHNTdG9yZSI6ICJkZXNrdG9wIiwgCSJjdXJyZW50Q29udGV4dCI6ICJkZXNrdG9wLWxpbnV4IiwgCSJwbHVnaW5zIjogeyAJCSJkZWJ1ZyI6IHsgCQkJImhvb2tzIjogImV4ZWMiIAkJfSwgCQkic2NvdXQiOiB7IAkJCSJob29rcyI6ICJwdWxsLGJ1aWxkeCBidWlsZCIgCQl9IAl9LCAJImZlYXR1cmVzIjogeyAJCSJob29rcyI6ICJ0cnVlIiAJfSwgCSJhdXRocyI6IHsgCQkiZ2hjci5pbyI6IHsgCQkJImF1dGgiOiAiYTI1aGRYUnBiSFZ6T21kb2NGOVlNRmRQYWpaUmN6Qk1jVUpSYldGNGJrbFJOa1ExUldKWGVXZEVRV0V6TW5CSlVXRT0iIAkJfSAJfSB9
 # Database configuration
 database:
   host: postgres
@@ -33,7 +33,7 @@ database:
 monolith:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/monolith
+    repository: ghcr.io/knautilus/architecture-cinemaabyss/monolith
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -48,12 +48,13 @@ monolith:
     port: 8080
     targetPort: 8080
     type: ClusterIP
+    kafkaBrokers: kafka:9092
 
 # Proxy service configuration
 proxyService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/proxy-service
+    repository: ghcr.io/knautilus/architecture-cinemaabyss/proxy-service
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -73,7 +74,7 @@ proxyService:
 moviesService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/movies-service
+    repository: ghcr.io/knautilus/architecture-cinemaabyss/movies-service
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -93,7 +94,7 @@ moviesService:
 eventsService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/events-service
+    repository: ghcr.io/knautilus/architecture-cinemaabyss/events-service
     tag: latest
     pullPolicy: Always
   replicas: 1
