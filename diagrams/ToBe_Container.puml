@@ -1,0 +1,63 @@
+@startuml
+
+title Диаграмма контейнеров: Система 'Кинобездна'
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(User, "Пользователь", "Пользователь системы 'Кинобездна'")
+
+Container_Boundary(CinemaAbyss, "Система 'Кинобездна'") {
+    Container(SmartTvApp, "Приложение для SmartTV", "Приложение SmartTV для системы 'Кинобездна'")
+    Container(WebApp, "Web-приложение", "Веб интерфейс для системы 'Кинобездна'")
+    Container(MobileApp, "Мобильное приложение", "Мобильное приложение для системы 'Кинобездна'")
+    Container(ApiGateway, "Api Gateway", "Шлюз для направления запросов на соответствующие сервисы")
+    Container(UserService, "Сервис пользователей", "Аутентификация пользователей, управление профилями пользователей")
+    Container(PaymentService, "Сервис платежей", "Взаимодействие с внешними платежными системами")
+    Container(SubscriptionService, "Сервис подписок", "Управление подписками")
+    Container(MetadataService, "Сервис метаданных фильмов", "Работа с метаданными фильмов")
+    Container(RecommendationService, "Сервис рекомендаций", "Взаимодействие с внешней рекомендательной системой")
+    Container(RatingService, "Сервис оценок", "Выставление оценок фильмам")
+    Container(VideoStreamingService, "Сервис просмотра видео", "Просмотр фильмов из внешних онлайн-кинотеатров")
+    ContainerDb(CinemaAbyssDb, "Общая база данных системы", "PostgtreSQL", "Хранит данные системы")
+    ContainerDb(MovieDb, "База данных фильмов и метаданных", "PostgtreSQL", "Хранит данные фильмов и метаданных")
+}
+
+System_Boundary(RecommendationSystem, "Внешняя рекомендательная система") {
+    System_Ext(RecService, "Сервис рекомендаций")
+    ContainerQueue_Ext(RecQueue, "Брокер сообщений", "Обмен данными между сервисами")
+}
+
+System_Ext(PaymentSystem, "Внешняя платежная система")
+System_Ext(CinemaSystem, "Внешний онлайн-кинотеатр")
+
+Rel(User, WebApp, "Использует систему")
+Rel(User, MobileApp, "Использует систему")
+Rel(User, SmartTvApp, "Использует систему")
+Rel(WebApp, ApiGateway, "Отправляет запросы")
+Rel(MobileApp, ApiGateway, "Отправляет запросы")
+Rel(SmartTvApp, ApiGateway, "Отправляет запросы")
+Rel(ApiGateway, UserService, "Запрашивает данные о пользователях, производит аутентификацию пользователей, управляет профилями пользователей")
+Rel(ApiGateway, SubscriptionService, "Запрашивает данные о подписках, управляет подписками")
+Rel(ApiGateway, PaymentService, "Производит платежи")
+Rel(ApiGateway, MetadataService, "Запрашивает метаданные фильмов")
+Rel(ApiGateway, RecommendationService, "Запрашивает рекомендации фильмов")
+Rel(ApiGateway, RatingService, "Запрашивает данные об оценках, ставит оценки")
+Rel(ApiGateway, VideoStreamingService, "Запрашивает видео-потоки фильмов")
+Rel(MetadataService, MovieDb, "Читает/записывает данные о фильмах и метаданных")
+Rel(VideoStreamingService, MovieDb, "Читает/записывает данные о фильмах")
+Rel(MetadataService, CinemaSystem, "Запрашивает данные о метаданных фильмов")
+Rel(VideoStreamingService, CinemaSystem, "Запрашивает данные о фильмах, видео-потоки фильмов")
+Rel(PaymentService, PaymentSystem, "Взаимодействует с внешней платежной системой")
+Rel(PaymentService, CinemaAbyssDb, "Сохраняет информацию о платежах")
+Rel(UserService, CinemaAbyssDb, "Читает/записывает данные о пользователях и профилях")
+Rel(SubscriptionService, CinemaAbyssDb, "Читает/записывает данные о пользователях, платежах и подписках")
+Rel(RatingService, CinemaAbyssDb, "Читает/записывает данные об оценках")
+Rel(RecommendationService, CinemaAbyssDb, "Читает/записывает данные о рекомендациях")
+Rel(RecommendationService, MovieDb, "Читает данные о фильмах")
+Rel(RecommendationService, RecQueue, "Получает сообщения о рекомендациях фильмов")
+Rel(RatingService, RecQueue, "Отправляет сообщения об оценках фильмов")
+Rel(VideoStreamingService, RecQueue, "Отправляет сообщения о просмотрах фильмов")
+Rel(RecService, RecQueue, "Отправляет сообщения о рекомендациях фильмов")
+Rel(RecService, RecQueue, "Получает сообщения об оценках и просмотрах")
+
+@enduml
