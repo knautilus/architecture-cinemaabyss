@@ -1,14 +1,16 @@
-## Изучите [README.md](.\README.md) файл и структуру проекта.
+# Проектная работа 2 спринта "Разбивка монолитной системы на микросервисы, работа с инфраструктурой"
 
-# Задание 1
+### Изучите [README.md](.\README.md) файл и структуру проекта.
 
-[Визуализация контейнеров в нотации C4](diagrams/ToBe_Container.puml)
+## Задание 1
 
-# Задание 2
+![Визуализация контейнеров в нотации C4](diagrams/ToBe_Container.png)
+
+## Задание 2
 
 ### 1. Proxy
-Команда КиноБездны уже выделила сервис метаданных о фильмах movies и вам необходимо реализовать бесшовный переход с применением паттерна Strangler Fig в части реализации прокси-сервиса (API Gateway), с помощью которого можно будет постепенно переключать траффик, используя фиче-флаг.
 
+Команда КиноБездны уже выделила сервис метаданных о фильмах movies и вам необходимо реализовать бесшовный переход с применением паттерна Strangler Fig в части реализации прокси-сервиса (API Gateway), с помощью которого можно будет постепенно переключать траффик, используя фиче-флаг.
 
 Реализуйте сервис на любом языке программирования в ./src/microservices/proxy.
 Конфигурация для запуска сервиса через docker-compose уже добавлена
@@ -45,6 +47,7 @@
 
 
 ### 2. Kafka
+
  Вам как архитектуру нужно также проверить гипотезу насколько просто реализовать применение Kafka в данной архитектуре.
 
 Для этого нужно сделать MVP сервис events, который будет при вызове API создавать и сам же читать сообщения в топике Kafka.
@@ -63,7 +66,7 @@
 
 ![topics.png](images/topics.png)
 
-# Задание 3
+## Задание 3
 
 Команда начала переезд в Kubernetes для лучшего масштабирования и повышения надежности. 
 Вам, как архитектору осталось самое сложное:
@@ -117,6 +120,7 @@ jobs:
 ### Proxy в Kubernetes
 
 #### Шаг 1
+
 Для деплоя в kubernetes необходимо залогиниться в docker registry Github'а.
 1. Создайте Personal Access Token (PAT) https://github.com/settings/tokens . Создавайте class с правом read:packages
 2. В src/kubernetes/*.yaml (event-service, monolith, movies-service и proxy-service)  отредактируйте путь до ваших образов 
@@ -232,21 +236,21 @@ cat .docker/config.json | base64
   Будет наподобие такого
 
 ```bash
-  NAME                              READY   STATUS    
+  NAME                              READY   STATUS
 
-  events-service-7587c6dfd5-6whzx   1/1     Running  
+  events-service-7587c6dfd5-6whzx   1/1     Running
 
-  kafka-0                           1/1     Running   
+  kafka-0                           1/1     Running
 
-  monolith-8476598495-wmtmw         1/1     Running  
+  monolith-8476598495-wmtmw         1/1     Running
 
-  movies-service-6d5697c584-4qfqs   1/1     Running  
+  movies-service-6d5697c584-4qfqs   1/1     Running
 
-  postgres-0                        1/1     Running  
+  postgres-0                        1/1     Running
 
-  proxy-service-577d6c549b-6qfcv    1/1     Running  
+  proxy-service-577d6c549b-6qfcv    1/1     Running
 
-  zookeeper-0                       1/1     Running 
+  zookeeper-0                       1/1     Running
 ```
 
   8. Добавим ingress
@@ -288,7 +292,8 @@ cat .docker/config.json | base64
 
 ![logs-events-service.png](images/logs-events-service.png)
 
-# Задание 4
+## Задание 4
+
 Для простоты дальнейшего обновления и развертывания вам как архитектуру необходимо так же реализовать helm-чарты для прокси-сервиса и проверить работу 
 
 Для этого:
@@ -365,7 +370,7 @@ https://cinemaabyss.example.com/api/movies
 
 ![helm-response-api-movies.png](images/helm-response-api-movies.png)
 
-## Удаляем все
+### Удаляем все
 
 ```bash
 kubectl delete all --all -n cinemaabyss
